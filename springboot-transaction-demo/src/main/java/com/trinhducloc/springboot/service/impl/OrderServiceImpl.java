@@ -47,7 +47,9 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponse;
     }
-    public static void main(String[] args){
-        String a = UUID.randomUUID().toString();
-    }
+
+//    Check randomUUID().toString() with debug
+//    public static void main(String[] args){
+//        String a = UUID.randomUUID().toString();
+//    }
 }
