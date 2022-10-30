@@ -24,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponse placeOrder(OrderRequest orderRequest){
         Order order = orderRequest.getOrder();
         order.setStatus("INPROGRESS");
@@ -46,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponse;
     }
-
-
-
+    public static void main(String[] args){
+        String a = UUID.randomUUID().toString();
+    }
 }
