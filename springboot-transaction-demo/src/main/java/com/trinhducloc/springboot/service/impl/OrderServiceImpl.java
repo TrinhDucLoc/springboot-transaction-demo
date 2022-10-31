@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+//    service link repository: orderRepository, paymentRepository
     private OrderRepository orderRepository;
     private PaymentRepository paymentRepository;
 
@@ -24,23 +25,37 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    //    Vi sao cho nay dung @Transactional
+
     @Transactional
+    //    Truyen vao mot OrderRequest de dat hang
     public OrderResponse placeOrder(OrderRequest orderRequest){
+//        Khoi tao doi tuong order tu OrderRequest.getOrder()
         Order order = orderRequest.getOrder();
-        order.setStatus("INPROGRESS");
+//        Trang thai: IN PROGRESS
+        order.setStatus("IN PROGRESS");
+//       Cai dat so luong theo doi don hang: UUID de tao ID voi do dai 128bit
         order.setOrderTrackingNumber(UUID.randomUUID().toString());
+//        luu entity "order" vao orderRepository
         orderRepository.save(order);
 
+//        khoi tao doi tuong payment tu orderRequest.getPayment
         Payment payment = orderRequest.getPayment();
 
+//        kiem tra xem loai the co dung la "DEBIT" khong
+//        => Neu sai tra ve PaymentException
         if(!payment.getType().equals("DEBIT")){
             throw new PaymentException("Payment card type do not support");
         }
 
+//      cai dat "setOrderId" voi OrderId tuong ung
         payment.setOrderId(order.getId());
+//        luu entity "payment" vao paymentRepository
         paymentRepository.save(payment);
 
+//        khoi tao orderResponse
         OrderResponse orderResponse = new OrderResponse();
+
         orderResponse.setOrderTrackingNumber(order.getOrderTrackingNumber());
         orderResponse.setStatus(order.getStatus());
         orderResponse.setMessage("SUCCESS");
